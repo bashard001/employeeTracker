@@ -39,3 +39,26 @@ function start(){
     })
 
 }
+
+function addEmployee(){
+    inquirer.prompt([{
+        name:"firstname",
+        type:"input",
+        message:"whats the first name?"
+    },{
+        name:"lastname",
+        type:"input",
+        message:"whats the last name?"
+    },{
+        name:"role",
+        type:"input",
+        message:"whats his/her role?"
+    },{
+        name:"managerid",
+        type:"number",
+        message:"whats the first name?"
+    }
+]).then(function(answer){
+    console.log(answer)
+})
+}
