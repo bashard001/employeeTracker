@@ -19,7 +19,7 @@ function start(){
     inquirer.prompt({
         name: "edit",
       type: "list",
-      message: "Would you like to [POST] an auction or [BID] on an auction?",
+      message: "Would you like to add/edit employee on the database?",
       choices: ["add", "view", "delete"]
     }).then(function(answer){
 
@@ -40,6 +40,7 @@ function start(){
 
 }
 
+// function to add employee to the database..
 function addEmployee(){
     inquirer.prompt([{
         name:"firstname",
@@ -56,9 +57,19 @@ function addEmployee(){
     },{
         name:"managerid",
         type:"number",
-        message:"whats the first name?"
+        message:"enter manager id number?"
     }
 ]).then(function(answer){
     console.log(answer)
+
+    connection.query("insert into employee set ?", {
+        first_name: answer.firstname,
+        last_name: answer.lastname,
+        e_role: answer.role,
+        manager_id: answer.managerid
+    }, function(err){
+        if (err) throw err;
+        console.log("you have successfully added an employee")
+    })
 })
 }
