@@ -70,6 +70,37 @@ function addEmployee(){
     }, function(err){
         if (err) throw err;
         console.log("you have successfully added an employee")
+        start()
     })
 })
+}
+
+function viewEmployee() {
+    inquirer.prompt({
+        name:"employeeId",
+        type: "number",
+        message: "enter employee Id"
+    }).then(function(answer){
+        connection.query("select * from employee where id = ?", answer.employeeId, 
+        function(err, res){
+            if (err) throw err;
+            console.log(res)
+            start()
+        })
+    })
+}
+
+function deleteEmployee(){
+    inquirer.prompt({
+        name: "employeeId",
+        type: "number",
+        message: "enter employee ID number"
+    }).then(function(answer){
+        connection.query("delete from employee where id = ?", answer.employeeId,
+        function(err){
+            if (err) throw err;
+            console.log(`you have deleted employee with the id: ${answer.employeeId}`)
+            start()
+        })
+    })
 }
