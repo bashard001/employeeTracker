@@ -20,7 +20,7 @@ function start(){
         name: "edit",
       type: "list",
       message: "Would you like to add/edit employee on the database?",
-      choices: ["add", "view", "delete"]
+      choices: ["add", "view", "edit"]
     }).then(function(answer){
 
         if (answer.edit === "add"){
@@ -33,7 +33,7 @@ function start(){
 
         }else{
 
-            deleteEmployee()
+            editEmployee()
 
         }
     })
@@ -90,17 +90,53 @@ function viewEmployee() {
     })
 }
 
-function deleteEmployee(){
+function editEmployee(){
     inquirer.prompt({
-        name: "employeeId",
-        type: "number",
-        message: "enter employee ID number"
+        name:"updateOrDelete",
+        type:"list",
+        message:"update or delete?",
+        choices:["update", "delete"]
     }).then(function(answer){
-        connection.query("delete from employee where id = ?", answer.employeeId,
-        function(err){
-            if (err) throw err;
-            console.log(`you have deleted employee with the id: ${answer.employeeId}`)
-            start()
-        })
+        if (answer.updateOrDelete === "delete"){
+            inquirer.prompt({
+                name: "employeeId",
+                type: "number",
+                message: "enter employee ID number"
+            }).then(function(answer){
+                connection.query("delete from employee where id = ?", answer.employeeId,
+                function(err){
+                    if (err) throw err;
+                    console.log(`you have deleted employee with the id: ${answer.employeeId}`)
+                    start()
+                })
+            })
+        } else{
+            inquirer.prompt([{
+                name:"firstname",
+            type:"input",
+            message:"whats the first name?"
+
+            },{
+                name:"lastname",
+            type:"input",
+            message:"whats the last name?"
+            },{
+                name:"whatchange",
+                type:"list",
+                message:"what would you like to change",
+                choices:["first_name","last_name","e_role"]
+            },{
+                name:"changeto",
+            type:"input",
+            message:"enter your change?"
+            }]).then(function(answer){
+                connection.query(`update employee set ${answer.whatchange}='${answer.changeto}' where first_name='${answer.firstname}' and last_name='${answer.lastname}'`,
+                function(err){
+                    if (err) throw err;
+                    start()
+                })
+            })
+        }
     })
+    
 }
